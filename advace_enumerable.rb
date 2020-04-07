@@ -51,6 +51,18 @@ module Enumerable
     end
     false
   end
+
+  # my_none?
+
+  def my_none?
+    i = 0
+    while i < size
+      return false if yield(self[i])
+
+      i += 1
+    end
+    true
+  end
 end
 [1, 2, 2, 4, 6].my_each { |x| puts x }
 [1, 2, 3, 4, 5].my_each_with_index { |e, i| puts "element:#{e}, index:#{i}" }
@@ -60,3 +72,5 @@ my_all_res = [10, 20, 30, 8, 30, 40].my_all? { |x| x > 10 }
 puts my_all_res
 my_any_res = [1, 2, 3, 8, 3, 4].my_any? { |x| x > 10 }
 puts my_any_res
+my_none_res = [1, 2, 3, 3, 4].my_none? { |x| x > 5 }
+puts my_none_res
