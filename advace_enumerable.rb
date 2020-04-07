@@ -40,6 +40,17 @@ module Enumerable
     end
     true
   end
+
+  # my_any?
+  def my_any?
+    i = 0
+    while i < size
+      return true if yield(self[i])
+
+      i += 1
+    end
+    false
+  end
 end
 [1, 2, 2, 4, 6].my_each { |x| puts x }
 [1, 2, 3, 4, 5].my_each_with_index { |e, i| puts "element:#{e}, index:#{i}" }
@@ -47,3 +58,5 @@ my_select_res = [10, 20, 9, 8, 30, 40].my_select { |x| x > 10 }
 puts my_select_res
 my_all_res = [10, 20, 30, 8, 30, 40].my_all? { |x| x > 10 }
 puts my_all_res
+my_any_res = [1, 2, 3, 8, 3, 4].my_any? { |x| x > 10 }
+puts my_any_res
