@@ -29,8 +29,21 @@ module Enumerable
     end
     my_arr
   end
+  # my_all?
+
+  def my_all?
+    i = 0
+    while i < size
+      return false unless yield(self[i])
+
+      i += 1
+    end
+    true
+  end
 end
 [1, 2, 2, 4, 6].my_each { |x| puts x }
 [1, 2, 3, 4, 5].my_each_with_index { |e, i| puts "element:#{e}, index:#{i}" }
-res = [10, 20, 9, 8, 30, 40].my_select { |x| x > 10 }
-puts res
+my_select_res = [10, 20, 9, 8, 30, 40].my_select { |x| x > 10 }
+puts my_select_res
+my_all_res = [10, 20, 30, 8, 30, 40].my_all? { |x| x > 10 }
+puts my_all_res
