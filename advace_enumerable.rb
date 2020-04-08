@@ -98,6 +98,8 @@ module Enumerable
   # my_map
 
   def my_map(proc = nil)
+    return to_enum(:my_map) unless block_given?
+
     my_arr = []
     if proc.nil?
       my_each { |x| my_arr.push(yield(x)) }
