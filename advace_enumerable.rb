@@ -1,3 +1,4 @@
+# rubocop: disable Metrics/ModuleLength
 module Enumerable
   #  my_each
   def my_each
@@ -40,7 +41,7 @@ module Enumerable
   def my_all?(*arg)
     res = true
     if !arg[0].nil?
-      my_each { |x| res = false unless arg[0] == x }
+      my_each { |x| res = false unless arg[0] === x } # rubocop:disable Style/CaseEquality
     elsif !block_given?
       my_each { |x| res = false unless x }
     else
@@ -53,7 +54,7 @@ module Enumerable
   def my_any?(*arg)
     res = false
     if !arg[0].nil?
-      my_each { |x| res = true if arg[0] == x }
+      my_each { |x| res = true if arg[0] === x } # rubocop:disable Style/CaseEquality
     elsif !block_given?
       my_each { |x| res = true if x }
     else
@@ -67,7 +68,7 @@ module Enumerable
   def my_none?(*arg)
     res = true
     if !arg[0].nil?
-      my_each { |x| res = false if arg[0] == x }
+      my_each { |x| res = false if arg[0] === x } # rubocop:disable Style/CaseEquality
     elsif !block_given?
       my_each { |x| res = false if x }
     else
@@ -110,16 +111,26 @@ module Enumerable
   end
 
   # my_inject
-  def my_inject(start = 0)
-    i = 0
-    acc = start
-    while i < size
-      acc = yield(acc, self[i])
-      i += 1
+  def my_inject(*arg) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    arr = is_a?(Array) ? self : to_a
+    res = arg[0] if arg[0].is_a? Integer
+
+    if arg[0].is_a?(Symbol) || arg[0].is_a?(String)
+      sym = arg[0]
+    elsif arg[0].is_a?(Integer)
+      sym = arg[1] if arg[1].is_a?(Symbol) || arg[1].is_a?(String)
     end
-    acc
+
+    if sym
+      arr.my_each { |x| res = res ? res.send(sym, x) : x }
+    else
+      arr.my_each { |x| res = res ? yield(res, x) : x }
+    end
+
+    res
   end
 end
+# rubocop: enable Metrics/ModuleLength
 
 def multiply_els(arr)
   arr.my_inject(1) { |mul, e| mul * e }
