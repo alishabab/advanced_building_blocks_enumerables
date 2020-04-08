@@ -64,14 +64,16 @@ module Enumerable
 
   # my_none?
 
-  def my_none?
-    i = 0
-    while i < size
-      return false if yield(self[i])
-
-      i += 1
+  def my_none?(*arg)
+    res = true
+    if !arg[0].nil?
+      my_each { |x| res = false if arg[0] == x }
+    elsif !block_given?
+      my_each { |x| res = false if x }
+    else
+      my_each { |x| res = false if yield(x) }
     end
-    true
+    res
   end
   # my_count
 
