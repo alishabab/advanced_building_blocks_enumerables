@@ -1,6 +1,8 @@
 module Enumerable
   #  my_each
   def my_each
+    return to_enum(:my_each) unless block_given?
+
     i = 0
     while i < size
       yield(self[i])
@@ -11,6 +13,8 @@ module Enumerable
   # my_each_with_index
 
   def my_each_with_index
+    return to_enum(:my_each_with_index) unless block_given?
+
     i = 0
     while i < size
       yield(self[i], i)
@@ -21,6 +25,8 @@ module Enumerable
   # my_select
 
   def my_select
+    return to_enum(:my_select) unless block_given?
+
     i = 0
     my_arr = []
     while i < size
@@ -31,14 +37,16 @@ module Enumerable
   end
   # my_all?
 
-  def my_all?
-    i = 0
-    while i < size
-      return false unless yield(self[i])
-
-      i += 1
+  def my_all?(*arg)
+    res = true
+    if !arg[0].nil?
+      my_each { |x| res = false unless arg[0] == x }
+    elsif !block_given?
+      my_each { |x| res = false unless x }
+    else
+      my_each { |x| res = false unless yield(x) }
     end
-    true
+    res
   end
 
   # my_any?
