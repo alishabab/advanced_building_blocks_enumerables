@@ -85,11 +85,13 @@ module Enumerable
 
   # my_map
 
-  def my_map
-    return unless block_given?
-
+  def my_map(proc = nil)
     my_arr = []
-    my_each { |x| my_arr.push(yield(x)) }
+    if proc.nil?
+      my_each { |x| my_arr.push(yield(x)) }
+    else
+      my_each { |x| my_arr.push(proc.call(x)) }
+    end
     my_arr
   end
 
@@ -103,6 +105,10 @@ module Enumerable
     end
     acc
   end
+end
+
+def multiply_els(arr)
+  arr.my_inject(1) { |mul, e| mul * e }
 end
 # [1, 2, 2, 4, 6].my_each { |x| puts x }
 # [1, 2, 3, 4, 5].my_each_with_index { |e, i| puts "element:#{e}, index:#{i}" }
