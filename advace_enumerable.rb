@@ -82,6 +82,16 @@ module Enumerable
     end
     count
   end
+
+  # my_map
+
+  def my_map
+    return unless block_given?
+
+    my_arr = []
+    my_each { |x| my_arr.push(yield(x)) }
+    my_arr
+  end
 end
 # [1, 2, 2, 4, 6].my_each { |x| puts x }
 # [1, 2, 3, 4, 5].my_each_with_index { |e, i| puts "element:#{e}, index:#{i}" }
@@ -93,9 +103,9 @@ end
 # puts my_any_res
 # my_none_res = [1, 2, 3, 3, 4].my_none? { |x| x > 5 }
 # puts my_none_res
-my_count_res = [1, 2, 3, 4, 5].my_count
-puts my_count_res
-my_count_param = [1, 2, 2, 3, 4, 5].my_count(2)
-puts my_count_param
-my_count_block = [1, 2, 2, 3, 4, 5].my_count { |x| (x % 2).zero? }
-puts my_count_block
+# my_count_res = [1, 2, 3, 4, 5].my_count
+# puts my_count_res
+# my_count_param = [1, 2, 2, 3, 4, 5].my_count(2)
+# puts my_count_param
+# my_count_block = [1, 2, 2, 3, 4, 5].my_count { |x| (x % 2).zero? }
+# puts my_count_block
