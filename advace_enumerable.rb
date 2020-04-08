@@ -92,6 +92,17 @@ module Enumerable
     my_each { |x| my_arr.push(yield(x)) }
     my_arr
   end
+
+  # my_inject
+  def my_inject(start = 0)
+    i = 0
+    acc = start
+    while i < size
+      acc = yield(acc, self[i])
+      i += 1
+    end
+    acc
+  end
 end
 # [1, 2, 2, 4, 6].my_each { |x| puts x }
 # [1, 2, 3, 4, 5].my_each_with_index { |e, i| puts "element:#{e}, index:#{i}" }
