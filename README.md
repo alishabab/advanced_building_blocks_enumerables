@@ -3,7 +3,7 @@
 
 # Advanced Building Blocks - Enumerables [Solo Project]
 
-In this project, you will implement your own version of Ruby’s enumerable methods
+In this project, I implemented my own version of Ruby’s enumerable methods
 
 # What it does
 
@@ -15,11 +15,11 @@ Ruby
 
 ## Live Demo
 
-[Click for live webpage]()
+[Click to see on repl.it](https://repl.it/@shababsaifi/Advance-enumerable-methods-in-Ruby)
 
 ## Getting Started
 
-You will be redirected to a webpage where you can provide a list of numbers or strings to be sorted when you run the code.
+You will be redirected to repl where you can see the implementation of the ruby's enumerable methods.
 
 
 ## Author
