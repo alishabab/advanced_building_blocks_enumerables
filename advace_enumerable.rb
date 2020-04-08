@@ -50,14 +50,16 @@ module Enumerable
   end
 
   # my_any?
-  def my_any?
-    i = 0
-    while i < size
-      return true if yield(self[i])
-
-      i += 1
+  def my_any?(*arg)
+    res = false
+    if !arg[0].nil?
+      my_each { |x| res = true if arg[0] == x }
+    elsif !block_given?
+      my_each { |x| res = true if x }
+    else
+      my_each { |x| res = true if yield(x) }
     end
-    false
+    res
   end
 
   # my_none?
