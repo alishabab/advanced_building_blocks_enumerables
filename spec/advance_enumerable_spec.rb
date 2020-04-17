@@ -2,6 +2,7 @@ require '../advace_enumerable.rb'
 RSpec.describe Enumerable do
   include Enumerable
   let(:arr) { [2, 1, 7] }
+  let(:arr_nil) { [false, nil, false] }
   let(:multiply) do
     proc do |x|
       x * 3
@@ -37,6 +38,21 @@ RSpec.describe Enumerable do
     end
   end
 
+  describe '#my_select' do
+    it 'returns an array of items with satisfies condition' do
+      expect(arr.my_select { |x| x < 4 }).to eql(arr.select { |x| x < 4 })
+    end
+    it 'returns to_enum if no block is given' do
+      expect(arr.my_select).to be_a(Enumerator)
+    end
+    it 'returns an error if an argument is given' do
+      expect { arr.my_select(1) }.to raise_error(ArgumentError)
+    end
+    it 'returns an error if something else is given instead of an array' do
+      expect { 1.my_select }.to raise_error(NoMethodError)
+    end
+  end
+
   describe '#my_all?' do
     it 'returns true if all the items of array satisfies the condition' do
       expect(arr.my_all? { |x| x < 1 }).to eql(arr.all? { |x| x < 1 })
@@ -46,6 +62,48 @@ RSpec.describe Enumerable do
     end
     it 'returns true if all the elements are true if we dont pass block and argument' do
       expect(arr.my_all?).to be true
+    end
+    it 'returns true if an empty array is given' do
+      expect([].my_all?).to be true
+    end
+    it 'returns an error if something else is given instead of an array' do
+      expect { 1.my_all? }.to raise_error(NoMethodError)
+    end
+  end
+
+  describe '#my_none?' do
+    it 'returns true if none of the items of array satisfies the condition' do
+      expect(arr.my_none? { |x| x < 1 }).to eql(arr.none? { |x| x < 1 })
+    end
+    it 'returns true if none of the items match the pattern passed as argument' do
+      expect(arr.my_none?(/s/)).to eql(arr.none?(/s/))
+    end
+    it 'returns true if none of the elements are true if we dont pass block and argument' do
+      expect(arr_nil.my_none?).to be true
+    end
+    it 'returns true if an empty array is given' do
+      expect([].my_none?).to be true
+    end
+    it 'returns an error if something else is given instead of an array' do
+      expect { 1.my_none? }.to raise_error(NoMethodError)
+    end
+  end
+
+  describe '#my_any?' do
+    it 'returns true if any of the items of array satisfies the condition' do
+      expect(arr.my_any? { |x| x < 1 }).to eql(arr.any? { |x| x < 1 })
+    end
+    it 'returns true if any of the items match the pattern passed as argument' do
+      expect(arr.my_any?(/d/)).to eql(arr.any?(/d/))
+    end
+    it 'returns true if any of the elements are true if we dont pass block and argument' do
+      expect(arr.my_any?).to be true
+    end
+    it 'returns flase if an empty array is given' do
+      expect([].my_any?).to be false
+    end
+    it 'returns an error if something else is given instead of an array' do
+      expect { 1.my_any? }.to raise_error(NoMethodError)
     end
   end
 
@@ -58,6 +116,9 @@ RSpec.describe Enumerable do
     end
     it 'returns the amount of times a condition is satisfied by each element of array' do
       expect(arr.my_count(&:even?)).to be 1
+    end
+    it 'returns an error if something else is given instead of an array' do
+      expect { 1.my_all? }.to raise_error(NoMethodError)
     end
   end
 
