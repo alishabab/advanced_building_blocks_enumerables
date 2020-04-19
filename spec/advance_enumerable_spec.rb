@@ -3,7 +3,7 @@ RSpec.describe Enumerable do
   let(:num_arr) { [2, 1, 7] }
   let(:num_range) { (1..3) }
   let(:nil_arr) { [false, nil, false] }
-  let(:str_arr) { %w[abcd efgh ijkl] }
+  let(:str_arr) { %w[abcd aefgh aijkl] }
   let(:multiply) do
     proc do |x|
       x * 3
@@ -72,13 +72,16 @@ RSpec.describe Enumerable do
       expect(num_range.my_all? { |x| x < 4 }).to be true
     end
     it 'returns true if pattern is matched or array has all elements same as argument' do
-      expect(num_arr.my_all?(/d/)).to eql(num_arr.all?(/d/))
+      expect(str_arr.my_all?(/a/)).to be true
     end
     it 'returns true if all the elements are true if we dont pass block and argument' do
       expect(num_arr.my_all?).to be true
     end
     it 'returns true if an empty array is given' do
       expect([].my_all?).to be true
+    end
+    it 'returns false if all the items of array does not satisfies the condition' do
+      expect(num_range.my_all? { |x| x < 0 }).to be false
     end
     it 'returns an error if invoked on object other than enumerable' do
       expect { 1.my_all? }.to raise_error(NoMethodError)
@@ -93,13 +96,16 @@ RSpec.describe Enumerable do
       expect(num_range.my_none? { |x| x < 0 }).to be true
     end
     it 'returns true if none of the items match the pattern passed as argument' do
-      expect(num_arr.my_none?(/s/)).to eql(num_arr.none?(/s/))
+      expect(num_arr.my_none?(/z/)).to be true
     end
     it 'returns true if none of the elements are true if we dont pass block and argument' do
       expect(nil_arr.my_none?).to be true
     end
     it 'returns true if an empty array is given' do
       expect([].my_none?).to be true
+    end
+    it 'returns flase if any of the items of array satisfies the condition' do
+      expect(num_arr.my_none? { |x| x < 4 }).to be false
     end
     it 'returns an error if invoked on object other than enumerable' do
       expect { 1.my_none? }.to raise_error(NoMethodError)
@@ -114,10 +120,13 @@ RSpec.describe Enumerable do
       expect(num_range.my_any? { |x| x < 2 }).to be true
     end
     it 'returns true if any of the items match the pattern passed as argument' do
-      expect(num_arr.my_any?(/d/)).to eql(num_arr.any?(/d/))
+      expect(str_arr.my_any?(/d/)).to be true
     end
     it 'returns true if any of the elements are true if we dont pass block and argument' do
       expect(num_arr.my_any?).to be true
+    end
+    it 'returns false if none of the items of range satisfies the condition' do
+      expect(num_range.my_any? { |x| x < 0 }).to be false
     end
     it 'returns flase if an empty array is given' do
       expect([].my_any?).to be false
@@ -128,8 +137,11 @@ RSpec.describe Enumerable do
   end
 
   describe '#my_count' do
-    it 'counts the items of an array' do
+    it 'counts the items of an array if no block is passed' do
       expect(num_arr.my_count).to eql(num_arr.count)
+    end
+    it 'counts the items of an array which satisfies the condition if block is passed' do
+      expect(num_arr.my_count { |x| x < 3 }).to eql(2)
     end
     it 'counts the items of a range' do
       expect(num_range.my_count).to eql(3)
@@ -137,7 +149,7 @@ RSpec.describe Enumerable do
     it 'returns the amount of times an item is in an array if an argument is passed' do
       expect(num_arr.my_count(2)).to eql(1)
     end
-    it 'returns the amount of times a condition is satisfied by each element of num_array' do
+    it 'returns the amount of times a condition is satisfied by each element of array' do
       expect(num_arr.my_count(&:even?)).to be 1
     end
     it 'returns an error if invoked on object other than enumerable' do
