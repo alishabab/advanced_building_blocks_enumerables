@@ -6,7 +6,7 @@ module Enumerable
 
     i = 0
     while i < size
-      yield(self[i])
+      yield(to_a[i])
       i += 1
     end
     self
@@ -18,7 +18,7 @@ module Enumerable
 
     i = 0
     while i < size
-      yield(self[i], i)
+      yield(to_a[i], i)
       i += 1
     end
     self
@@ -31,7 +31,7 @@ module Enumerable
     i = 0
     my_arr = []
     while i < size
-      my_arr.push(self[i]) if yield(self[i])
+      my_arr.push(to_a[i]) if yield(to_a[i])
       i += 1
     end
     my_arr
